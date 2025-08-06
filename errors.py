@@ -1,4 +1,3 @@
-# errors.py
 class LogProcessingError(Exception):
     """Базовая ошибка при обработке логов."""
     pass
