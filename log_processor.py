@@ -1,10 +1,8 @@
-# log_processor.py
 import json
 from datetime import datetime
 from collections import defaultdict
 from errors import (
     FileReadError,
-    JSONParseError,
     DataProcessingError,
     UnknownReportTypeError,
 )
@@ -20,7 +18,7 @@ class LogProcessor:
     def __init__(self, file_path, report_type='average', date_filter=None):
         self.file_path = file_path
         self.report_type = report_type
-        self.date_filter_str = date_filter  # строка вида '2025-06-22'
+        self.date_filter_str = date_filter  
         self.endpoints_data = defaultdict(lambda: {'count': 0, 'total_time': 0.0})
         self.entries_for_reports = []
         
@@ -37,7 +35,6 @@ class LogProcessor:
                     try:
                         log_entry = json.loads(line)
                     except json.JSONDecodeError as e:
-                        # raise JSONParseError(f"Ошибка парсинга JSON в строке {line_number}: {e}")
                         continue
                     if '@timestamp' not in log_entry or 'url' not in log_entry:
                         raise DataProcessingError(f"Некорректный формат даты в строке {line_number}")
@@ -45,10 +42,8 @@ class LogProcessor:
                     # Фильтр по дате
                     if hasattr(self, 'date_filter_str') and self.date_filter_str:
                         timestamp_str = log_entry.get('@timestamp')
-                    # if self.date_filter_str:
-                    #     timestamp_str = log_entry.get('@timestamp')
                         if not timestamp_str:
-                            continue  # пропускаем записи без времени
+                            continue  
                         try:
                             timestamp_dt = datetime.fromisoformat(timestamp_str)
                             filter_date_dt = datetime.fromisoformat(self.date_filter_str)
@@ -57,7 +52,6 @@ class LogProcessor:
                         if timestamp_dt.date() != filter_date_dt.date():
                             continue
 
-                    # Сохраняем для отчетов типа user_agent и др
                     self.entries_for_reports.append(log_entry)
 
                     url = log_entry.get('url')

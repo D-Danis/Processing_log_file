@@ -1,4 +1,3 @@
-# main.py
 import argparse
 from tabulate import tabulate
 from log_processor import LogProcessor

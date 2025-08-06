@@ -1,5 +1,3 @@
-# reports.py
-from errors import LogProcessingError
 
 class Report:
     def __init__(self, data):
