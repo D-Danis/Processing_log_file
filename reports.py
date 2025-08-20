@@ -1,8 +1,9 @@
-
-class Report:
+from abc import ABC, abstractmethod
+class Report(ABC):
     def __init__(self, data):
         self.data = data
 
+    @abstractmethod
     def generate(self):
         raise NotImplementedError("Метод generate должен быть реализован в подклассах.")
 
