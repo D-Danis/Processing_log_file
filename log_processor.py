@@ -1,12 +1,18 @@
 import json
 from datetime import datetime
 from collections import defaultdict
+
 from errors import (
     FileReadError,
     DataProcessingError,
     UnknownReportTypeError,
 )
-from reports import AverageResponseTimeReport, CountRequestsReport, UserAgentReport
+from reports import (
+    AverageResponseTimeReport, 
+    CountRequestsReport, 
+    UserAgentReport
+)
+
 
 class LogProcessor:
     REPORT_TYPES = {

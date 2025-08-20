@@ -1,7 +1,8 @@
-import pytest
-import json
-import tempfile
 import os
+import json
+import pytest
+import tempfile
+
 from log_processor import LogProcessor
 from errors import (
     FileReadError,
@@ -9,17 +10,20 @@ from errors import (
     UnknownReportTypeError,
 )
 
+
 COMMON_LOG_CONTENT = "\n".join([
     json.dumps({"@timestamp": "2025-06-22T12:00:00", "url": "/api/v1/users", "response_time": 0.1, "http_user_agent": "UA1"}),
     json.dumps({"@timestamp": "2025-06-22T12:05:00", "url": "/api/v1/users", "response_time": 0.200, "http_user_agent": "UA2"}),
     json.dumps({"@timestamp": "2025-06-22T12:10:00", "url": "/api/v1/orders", "response_time": 0.300, "http_user_agent": "UA1"}),
 ])
 
+
 def create_temp_log_file(contents=COMMON_LOG_CONTENT):
     tmp = tempfile.NamedTemporaryFile(mode='w+', delete=False, encoding='utf-8')
     tmp.write(contents)
     tmp.close()
     return tmp.name
+
 
 def test_generate_average_report():
     filename = create_temp_log_file()
@@ -46,6 +50,7 @@ def test_generate_average_report():
 
     os.remove(filename)
 
+
 def test_generate_count_report():
     filename = create_temp_log_file()
     
@@ -62,6 +67,7 @@ def test_generate_count_report():
 
     os.remove(filename)
 
+
 def test_generate_user_agent_report():
     filename = create_temp_log_file()
     processor = LogProcessor(filename, report_type='user_agent', date_filter='2025-06-22')
@@ -76,10 +82,12 @@ def test_generate_user_agent_report():
     
     os.remove(filename)
 
+
 def test_file_not_found():
     with pytest.raises(FileReadError):
         processor = LogProcessor("nonexistent_file.log")
         processor.read_log()
+
 
 def test_missing_fields():
      content_missing_timestamp = json.dumps({"url":"test_url","response_time":0.1})
@@ -98,6 +106,7 @@ def test_missing_fields():
 
      os.remove(filename_ts_missing)
      os.remove(filename_url_missing)
+
 
 def test_unknown_report_type():
      filename = create_temp_log_file()

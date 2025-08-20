@@ -1,11 +1,15 @@
 from abc import ABC, abstractmethod
+from typing import  List, Dict, Tuple
+
+
 class Report(ABC):
-    def __init__(self, data):
+    def __init__(self,  data: List[Dict]):
         self.data = data
 
     @abstractmethod
-    def generate(self):
+    def generate(self)->Tuple[List[str], List]:
         raise NotImplementedError("Метод generate должен быть реализован в подклассах.")
+
 
 class AverageResponseTimeReport(Report):
     def generate(self):
@@ -18,6 +22,7 @@ class AverageResponseTimeReport(Report):
         headers = ['Endpoint', 'Number of Requests', 'Average Response Time (s)']
         return headers, report_rows
 
+
 class CountRequestsReport(Report):
     def generate(self):
         report_rows = []
@@ -26,6 +31,7 @@ class CountRequestsReport(Report):
             report_rows.append([endpoint, count])
         headers = ['Endpoint', 'Number of Requests']
         return headers, report_rows
+
 
 class UserAgentReport(Report):
     def generate(self):
